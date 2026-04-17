@@ -1,3 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>CPB Motion Dashboard</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            text-align: center;
+            background: #121212;
+            color: white;
+            padding-top: 50px;
+            transition: background 0.2s; /* This makes the color fade smoothly */
+        }
+        #value { font-size: 120px; font-weight: bold; margin: 20px; }
+        button { padding: 15px 30px; font-size: 18px; cursor: pointer; border-radius: 10px; border: none; background: #6200ee; color: white; }
+        .label { font-size: 24px; color: rgba(255,255,255,0.7); }
+    </style>
+</head>
+<body>
+
+<h1>CPB Motion Tracker</h1>
+<button id="connectBtn">Connect to CPB</button>
+
+<div style="margin-top: 80px;">
+    <div class="label">Movement Intensity</div>
+    <div id="value">0.00</div>
+</div>
+
 <script>
     const connectBtn = document.getElementById('connectBtn');
     const valueDisplay = document.getElementById('value');
@@ -18,6 +46,8 @@
             const characteristic = await service.getCharacteristic(UART_TX_CHARACTERISTIC_UUID);
 
             await characteristic.startNotifications();
+            connectBtn.innerText = "Connected!";
+            connectBtn.style.background = "#4caf50";
 
             characteristic.addEventListener('characteristicvaluechanged', (event) => {
                 const decoder = new TextDecoder('utf-8');
@@ -34,36 +64,26 @@
                     if (!isNaN(val)) {
                         valueDisplay.innerText = val.toFixed(2);
 
-                        // --- NEW COLOR LOGIC ---
                         if (val >= 8.0) {
-                            // STRONG -> RED
-                            document.body.style.background = "rgb(255, 0, 0)";
-                            valueDisplay.style.color = "white";
+                            document.body.style.backgroundColor = "red";
                         }
                         else if (val >= 4.0) {
-                            // MEDIUM -> PURPLE
-                            document.body.style.background = "rgb(128, 0, 128)";
-                            valueDisplay.style.color = "white";
+                            document.body.style.backgroundColor = "purple";
                         }
                         else if (val > 1.0) {
-                            // LIGHT -> BLUE
-                            document.body.style.background = "rgb(0, 0, 255)";
-                            valueDisplay.style.color = "white";
+                            document.body.style.backgroundColor = "blue";
                         }
                         else {
-                            // NO MOVEMENT -> BLACK
-                            document.body.style.background = "#121212";
-                            valueDisplay.style.color = "#00e5ff";
+                            document.body.style.backgroundColor = "#121212";
                         }
                     }
                 }
             });
-
-            connectBtn.innerText = "Connected!";
-            connectBtn.style.background = "#4caf50";
-
         } catch (error) {
             console.error(error);
+            alert("Error: " + error);
         }
     });
 </script>
+</body>
+</html>
