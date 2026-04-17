@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>CPB Motion Dashboard</title>
+    <title>TapSense Dashboard</title>
     <style>
         body {
             font-family: sans-serif;
@@ -9,22 +9,47 @@
             background: #121212;
             color: white;
             padding-top: 50px;
-            transition: background 0.2s; /* This makes the color fade smoothly */
+            transition: background 0.2s; /* Smooth color transitions */
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
-        #value { font-size: 120px; font-weight: bold; margin: 20px; }
-        button { padding: 15px 30px; font-size: 18px; cursor: pointer; border-radius: 10px; border: none; background: #6200ee; color: white; }
-        .label { font-size: 24px; color: rgba(255,255,255,0.7); }
+
+        /* Making the title bigger */
+        h1 {
+            font-size: 60px;
+            margin-bottom: 10px;
+            letter-spacing: 2px;
+        }
+
+        #value {
+            font-size: 150px;
+            font-weight: bold;
+            margin-top: 40px;
+        }
+
+        button {
+            padding: 15px 30px;
+            font-size: 18px;
+            cursor: pointer;
+            border-radius: 10px;
+            border: none;
+            background: #6200ee;
+            color: white;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+
+        button:hover { background: #7c4dff; }
     </style>
 </head>
 <body>
 
-<h1>CPB Motion Tracker</h1>
+<h1>TapSense</h1>
 <button id="connectBtn">Connect to CPB</button>
 
-<div style="margin-top: 80px;">
-    <div class="label">Movement Intensity</div>
-    <div id="value">0.00</div>
-</div>
+<div id="value">0.00</div>
 
 <script>
     const connectBtn = document.getElementById('connectBtn');
@@ -64,6 +89,7 @@
                     if (!isNaN(val)) {
                         valueDisplay.innerText = val.toFixed(2);
 
+                        // Background Color Logic matching your CPB code
                         if (val >= 8.0) {
                             document.body.style.backgroundColor = "red";
                         }
@@ -81,7 +107,7 @@
             });
         } catch (error) {
             console.error(error);
-            alert("Error: " + error);
+            alert("Connection failed. Make sure Bluetooth is on and the board isn't connected to your phone!");
         }
     });
 </script>
